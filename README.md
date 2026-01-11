@@ -65,26 +65,26 @@ We use **DQN (Stable-Baselines3)** because:
 ## Reward Function (Custom Shaping)
 
 The default rewards worked, but early training was too “reckless”: the agent learned to chase speed and crash frequently.
-To address this, we added a simple reward shaping term that balances speed, safety, and smooth driving.
+To address this, we added a simple shaping term that balances speed, safety, and smooth driving.
 
 $$
 R_t =
-\alpha \cdot r_{\text{speed}}
-+ \beta \cdot r_{\text{right}}
-- \gamma \cdot \mathbb{1}[\text{collision}]
-- \delta \cdot \mathbb{1}[d_{\min} < d_{\text{unsafe}}]
-- \lambda \cdot \mathbb{1}[\text{lane\_change}]
+\alpha \, r_{\mathrm{speed}}
++ \beta \, r_{\mathrm{right}}
+- \gamma \, \mathbf{1}[\mathrm{collision}]
+- \delta \, \mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]
+- \lambda \, \mathbf{1}[\mathrm{lane\_change}]
 $$
 
 **Reward components:**
 
-- $r_{\text{speed}}$: normalized speed reward (mapped from the speed range)
-- $r_{\text{right}}$: right-lane preference reward
-- $\mathbb{1}[\text{collision}]$: collision penalty (discourages crashing behavior)
-- $\mathbb{1}[d_{\min} < d_{\text{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
-- $\mathbb{1}[\text{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
+- $r_{\mathrm{speed}}$: normalized speed reward (mapped from the speed range)
+- $r_{\mathrm{right}}$: right-lane preference reward
+- $\mathbf{1}[\mathrm{collision}]$: collision penalty (discourages crashing behavior)
+- $\mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
+- $\mathbf{1}[\mathrm{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
 
----
+--
 
 ## Hyperparameters (Main Ones)
 
