@@ -67,16 +67,9 @@ We use **DQN (Stable-Baselines3)** because:
 The default rewards worked, but early training was too “reckless”: the agent learned to chase speed and crash frequently.
 To address this, we added a simple shaping term that balances speed, safety, and smooth driving.
 
-$$
-\begin{aligned}
-R_t =\;&
-\alpha \, r_{\mathrm{speed}}
-+ \beta \, r_{\mathrm{right}}
-- \gamma \, \mathbf{1}[\mathrm{collision}] \\
-&- \delta \, \mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]
-- \lambda \, \mathbf{1}[\mathrm{lane\_change}]
-\end{aligned}
-$$
+Reward function:
+
+<img width="639" height="44" alt="Screenshot 2026-01-12 at 00 56 48" src="https://github.com/user-attachments/assets/f565650f-aef2-4989-b552-20d65452bfbf" />
 
 **Reward components:**
 
