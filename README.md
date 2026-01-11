@@ -66,8 +66,8 @@ We use **DQN (Stable-Baselines3)** because:
 
 ## Reward Function (Custom Shaping)
 
-The default rewards worked, but early training was too “reckless”: the agent learned to chase speed and crash a lot.
-So we added shaping to push it toward safer behavior without making it slow.
+The default rewards worked, but early training was too “reckless”: the agent learned to chase speed and crash frequently.
+To address this, we added a simple reward shaping term that balances speed, safety, and smooth driving.
 
 $$
 R_t =
@@ -77,6 +77,7 @@ R_t =
 - \delta \cdot \mathbb{1}[d_{\min} < d_{\text{unsafe}}]
 - \lambda \cdot \mathbb{1}[\text{lane\_change}]
 $$
+
 
 **Reward components:**
 - $r_{\text{speed}}$: normalized speed reward (mapped from the speed range)
@@ -131,24 +132,19 @@ This made behavior noticeably smoother without making the agent slow.
 
 ---
 
-## Reproducibility
-
-### Install
-pip install -r requirements.txt
-
-### Training
-python -m src.train
-
-### Plot rewards
-python -m src.plot_rewards
-
 ### Generate evolution video
+
+The evolution GIF is created by recording three agents under the same environment
+configuration and random seed, then concatenating the videos.
+
 #### Untrained (random policy)
-- python -m src.play --env highway-fast-v0 --seed 0
+python -m src.play --seed 0 --record
 
 #### Half-trained
-- python -m src.play --env highway-fast-v0 --seed 0 --model models/dqn_half.zip
+python -m src.play --seed 0 --record --model models/dqn_half.zip
 
 #### Fully trained
-- python -m src.play --env highway-fast-v0 --seed 0 --model models/dqn_full.zip
+python -m src.play --seed 0 --record --model models/dqn_full.zip
 
+#### Merge into a single GIF
+python -m src.make_evolution_gif
