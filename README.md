@@ -78,11 +78,13 @@ $$
 
 
 **Reward components:**
+
 - $r_{\text{speed}}$: normalized speed reward (mapped from the speed range)
 - $r_{\text{right}}$: right-lane preference reward
 - $\mathbb{1}[\text{collision}]$: collision penalty (discourages crashing behavior)
 - $\mathbb{1}[d_{\min} < d_{\text{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
 - $\mathbb{1}[\text{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
+
 
 ---
 
