@@ -1,4 +1,4 @@
-# Applied Reinforcement Learning — Final Project
+# Applied Reinforcement Learning
 ## Autonomous Driving with highway-env (DQN)
 
 **Group Members**
