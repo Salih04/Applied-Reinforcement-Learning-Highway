@@ -68,12 +68,14 @@ The default rewards worked, but early training was too “reckless”: the agent
 To address this, we added a simple shaping term that balances speed, safety, and smooth driving.
 
 $$
-R_t =
+\begin{aligned}
+R_t =\;&
 \alpha \, r_{\mathrm{speed}}
 + \beta \, r_{\mathrm{right}}
-- \gamma \, \mathbf{1}[\mathrm{collision}]
-- \delta \, \mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]
+- \gamma \, \mathbf{1}[\mathrm{collision}] \\
+&- \delta \, \mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]
 - \lambda \, \mathbf{1}[\mathrm{lane\_change}]
+\end{aligned}
 $$
 
 **Reward components:**
@@ -84,7 +86,7 @@ $$
 - $\mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
 - $\mathbf{1}[\mathrm{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
 
---
+
 
 ## Hyperparameters (Main Ones)
 
