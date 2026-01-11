@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
+
+runs/
+models/
+tmp_videos/
+
+.DS_Store
+__MACOSX/

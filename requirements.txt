@@ -1,0 +1,6 @@
+gymnasium>=0.29
+highway-env
+stable-baselines3
+torch
+numpy
+matplotlib
