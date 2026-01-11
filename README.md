@@ -5,7 +5,7 @@
 - Salih Camcı
 
 > **Track:** Autonomous Driving (highway-env)  
-> **Environment:** `highway-fast-v0` (CPU-friendly)
+> **Environment:** `highway-fast-v0` 
 
 ---
 
@@ -13,9 +13,9 @@
 
 Same env config + same seed, three checkpoints:
 
-1) **Untrained** — mostly random actions, crashes quickly  
+1) **Untrained** — random actions, crashes quickly  
 2) **Half-trained** — survives longer, but still makes risky lane changes  
-3) **Fully trained** — more stable high-speed driving with fewer collisions
+3) **Fully trained** — more stable high speed driving with fewer collisions
 
 ![Evolution](assets/evolution.gif)
 
@@ -32,7 +32,7 @@ The main challenge is balancing **speed vs. safety**.
 
 ### Observations (State)
 
-We use **Kinematics** observations (vector-based, not pixels).  
+We use **Kinematics** observations.  
 The agent sees a fixed-size list of nearby vehicles with:
 
 - presence
