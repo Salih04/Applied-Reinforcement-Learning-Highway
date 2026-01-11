@@ -74,8 +74,8 @@ R_t =
 - \gamma \cdot \mathbb{1}[\text{collision}]
 - \delta \cdot \mathbb{1}[d_{\min} < d_{\text{unsafe}}]
 - \lambda \cdot \mathbb{1}[\text{lane\_change}]
-$$
 
+$$
 **Reward components:**
 
 - $r_{\text{speed}}$: normalized speed reward (mapped from the speed range)
