@@ -3,8 +3,6 @@
 
 **Group Members**
 - Salih Camcı
-- Member 2
-- Member 3
 
 > **Track:** Autonomous Driving (highway-env)  
 > **Environment:** `highway-fast-v0` (CPU-friendly)
