@@ -1,8 +1,8 @@
 # Applied Reinforcement Learning
 ## Autonomous Driving with highway-env (DQN)
 
-**Group Members**
-- Salih Camcı
+**Group Member**
+- Salih Camcı | 2202041
 
 > **Track:** Autonomous Driving (highway-env)  
 > **Environment:** `highway-fast-v0` 
