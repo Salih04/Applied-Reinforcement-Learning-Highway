@@ -1,7 +1,7 @@
 # Applied Reinforcement Learning
 ## Autonomous Driving with highway-env (DQN)
 
-**Group Member**
+**Author**
 - Salih Camcı | 2202041
 
 > **Track:** Autonomous Driving (highway-env)  
@@ -75,7 +75,8 @@ I use DQN (Stable-Baselines3) because:
 ## Reward Function (Custom Shaping)
 
 The default rewards were effective, but the initial training was too irresponsible: the agent educated to run after speed and to crash very often.
-In response to this a single-syllable shaping word was fitted that compromises speed, safety and easy driving.
+To address this, a custom reward shaping function was designed to explicitly balance speed, safety, and driving smoothness.
+The shaping does not introduce new information, but reweights existing signals to stabilize learning and reduce unsafe behaviors.
 
 <img width="639" height="44" alt="Screenshot 2026-01-12 at 00 56 48" src="https://github.com/user-attachments/assets/f565650f-aef2-4989-b552-20d65452bfbf" />
 
@@ -165,5 +166,3 @@ python -m src.play --seed 0 --record --model models/dqn_half.zip
 #### Fully trained
 python -m src.play --seed 0 --record --model models/dqn_full.zip
 
-#### Merge into a single GIF
-python -m src.make_evolution_gif
