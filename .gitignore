@@ -9,6 +9,11 @@ venv/
 runs/
 models/
 tmp_videos/
+assets/videos/
+*.mp4
+
+models/*.zip
+
 
 .DS_Store
 __MACOSX/

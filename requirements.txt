@@ -7,3 +7,4 @@ matplotlib
 imageio
 imageio-ffmpeg
 moviepy
+pillow
