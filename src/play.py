@@ -1,59 +1,67 @@
 from __future__ import annotations
 
 import argparse
-import random
+from pathlib import Path
 
 import gymnasium as gym
 import highway_env  # noqa: F401
-import numpy as np
 from stable_baselines3 import DQN
 
 from src.config import build_train_config
-from src.wrappers.reward_wrapper import HighwayRewardWrapper, RewardParams
+from src.rewards import wrap_with_shaping
+from src.utils import seed_env, repo_root
 
 
-def seed_env(env: gym.Env, seed: int) -> None:
-    random.seed(seed)
-    np.random.seed(seed)
-    env.reset(seed=seed)
-    try:
-        env.action_space.seed(seed)
-    except Exception:
-        pass
+def make_env(cfg, seed: int, record: bool, model_path: str | None) -> gym.Env:
+    render_mode = "rgb_array" if record else "human"
+    env = gym.make(cfg.env_id, config=cfg.env_config, render_mode=render_mode)
 
-
-def make_env(seed: int) -> gym.Env:
-    cfg = build_train_config()
-
-    env = gym.make(cfg.env_id, config=cfg.env_config, render_mode="human")
-
-    params = RewardParams(
-        alpha_speed=cfg.alpha_speed,
-        beta_right_lane=cfg.beta_right_lane,
-        gamma_crash=cfg.gamma_crash,
-        delta_unsafe=cfg.delta_unsafe,
-        lambda_lane_change=cfg.lambda_lane_change,
-        unsafe_distance_m=cfg.unsafe_distance_m,
-        reward_speed_range=tuple(cfg.env_config.get("reward_speed_range", [20, 30])),
-    )
-    env = HighwayRewardWrapper(env, params=params)
-
+    # reward shaping
+    env = wrap_with_shaping(env, cfg)
     seed_env(env, seed)
+
+    if record:
+        # decide stage name
+        stage = "untrained"
+        if model_path:
+            if "half" in model_path:
+                stage = "half_trained"
+            elif "full" in model_path:
+                stage = "fully_trained"
+
+        video_dir = repo_root() / "assets" / "videos" / stage
+        video_dir.mkdir(parents=True, exist_ok=True)
+
+        env = gym.wrappers.RecordVideo(
+            env,
+            video_folder=str(video_dir),
+            episode_trigger=lambda ep: True,
+            disable_logger=True,
+        )
+
     return env
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--env", default=None)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--model", type=str, default=None)
+    parser.add_argument("--record", action="store_true")
     args = parser.parse_args()
 
-    env = make_env(seed=args.seed)
+    cfg = build_train_config()
 
+    env = make_env(
+        cfg,
+        seed=args.seed,
+        record=args.record,
+        model_path=args.model,
+    )
+
+    model = None
     if args.model:
         model = DQN.load(args.model, env=env)
-    else:
-        model = None  # untrained: random actions
 
     obs, _ = env.reset()
     done = truncated = False
@@ -66,7 +74,13 @@ def main() -> None:
 
         obs, _, done, truncated, _ = env.step(action)
 
+        # IMPORTANT for RecordVideo
+        env.render()
+
     env.close()
+
+    if args.record:
+        print("[OK] Video saved under assets/videos/")
 
 
 if __name__ == "__main__":

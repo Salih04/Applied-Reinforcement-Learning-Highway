@@ -4,3 +4,6 @@ stable-baselines3
 torch
 numpy
 matplotlib
+imageio
+imageio-ffmpeg
+moviepy

@@ -149,3 +149,18 @@ class RewardShapingWrapper(gym.Wrapper):
             return bool(min_front < float(self.cfg.unsafe_distance_m))
         except Exception:
             return False
+
+def wrap_with_shaping(env: gym.Env, train_cfg) -> gym.Env:
+    """
+    Helper to wrap an environment using parameters from TrainConfig.
+    """
+    rcfg = RewardConfig(
+        alpha_speed=train_cfg.alpha_speed,
+        beta_right_lane=train_cfg.beta_right_lane,
+        gamma_crash=train_cfg.gamma_crash,
+        delta_unsafe=train_cfg.delta_unsafe,
+        lambda_lane_change=train_cfg.lambda_lane_change,
+        unsafe_distance_m=train_cfg.unsafe_distance_m,
+        reward_speed_range=tuple(train_cfg.env_config.get("reward_speed_range", [20, 30])),
+    )
+    return RewardShapingWrapper(env, rcfg)
