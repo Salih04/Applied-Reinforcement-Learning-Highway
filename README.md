@@ -145,33 +145,40 @@ This not only enabled the behavior to become significantly smoother but also did
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-
-# 2) Train
+### 2) Train
 This will train for 300k timesteps and save checkpoints under models/:
 - models/dqn_half.zip
 - models/dqn_full.zip
-
+  
+```python
 python -m src.train
-
-# 3) Evaluate 
+```
+### 3) Evaluate 
+```python
 python -m src.evaluate --model models/dqn_full.zip
+```
 
-# 4) Plot reward curve
+### 4) Plot reward curve
+```python
 python -m src.plot_rewards
-
+```
 ---
 
-# Generate evolution video
+### Generate evolution video
 The evolution GIF was created from short screen recordings of three different agent checkpoints.
 Raw video files are not included in the repository to keep it lightweight.
 
-# Untrained (random policy)
+#### Untrained (random policy)
+```python
 python -m src.play --seed 0 --record
-
-# Half-trained
+```
+#### Half-trained
+```python
 python -m src.play --seed 0 --record --model models/dqn_half.zip
-
-# Fully trained
+```
+#### Fully trained
+```python
 python -m src.play --seed 0 --record --model models/dqn_full.zip
 ```
