@@ -140,17 +140,17 @@ source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
 
 pip install -r requirements.txt
 
-2) Train
+### 2) Train
 This will train for 300k timesteps and save checkpoints under models/:
 - models/dqn_half.zip
 - models/dqn_full.zip
 
 python -m src.train
 
-3) Evaluate (optional)
+### 3) Evaluate (optional)
 python -m src.evaluate --model models/dqn_full.zip
 
-4) Plot reward curve
+### 4) Plot reward curve
 python -m src.plot_rewards
 
 ---
