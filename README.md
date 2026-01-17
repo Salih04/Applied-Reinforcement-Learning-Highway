@@ -153,7 +153,8 @@ python -m src.plot_rewards
 ---
 
 ### Generate evolution video
-GIF evolution is made through a recording of three agents in the same environment.
+The evolution GIF was created from short screen recordings of three different agent checkpoints.
+Raw video files are not included in the repository to keep it lightweight.
 
 #### Untrained (random policy)
 python -m src.play --seed 0 --record
