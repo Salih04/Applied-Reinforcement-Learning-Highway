@@ -87,12 +87,9 @@ In response to this a single-syllable shaping word was fitted that compromises s
 - $\mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
 - $\mathbf{1}[\mathrm{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
 
-
+---
 
 ## Hyperparameters (Main Ones)
-
-This is because hyperparameters are stored in the config file (and I do not have magic numbers in logic).
-
 - total timesteps: **300,000**
 - learning rate: **5e-4**
 - buffer size: **50,000**
@@ -114,7 +111,7 @@ Why these values?
 ![Reward Curve](assets/reward_curve.png)
 
 **What the curve shows (brief):**
-- Early phase: low reward because the policy is basically random → frequent collisions
+- Early phase: low reward because the policy is basically random 
 - Middle phase: reward rises as the agent learns “don’t crash immediately”
 - Late phase: curve stabilizes; improvements become smaller (policy converges under current setup)
 
@@ -125,8 +122,8 @@ Why these values?
 ### 1) Too many early crashes
 At first, the agent often spammed `FASTER` and changed lanes aggressively, which caused lots of collisions. I fixed this by:
 - increasing collision penalty
-- adding an unsafe-following penalty
-- adding a small lane-change penalty
+- adding an unsafe following penalty
+- adding a small lane change penalty
 
 This not only enabled the behavior to become significantly smoother but also did not slow down the agent.
 
