@@ -13,9 +13,9 @@
 
 Same env config + same seed, three checkpoints:
 
-1) **Untrained** — random actions, crashes quickly  
-2) **Half-trained** — survives longer, but still makes risky lane changes  
-3) **Fully trained** — more stable high speed driving with fewer collisions
+1) **Untrained** : Random actions, crashes quickly  
+2) **Half-trained** : Survives longer, but still makes risky lane changes  
+3) **Fully trained** : More stable high speed driving with fewer collisions
 
 ![Evolution](assets/evolution.gif)
 
@@ -23,8 +23,8 @@ Same env config + same seed, three checkpoints:
 
 ## Objective
 
-Train an agent that drives **as fast as possible** in **dense traffic** while **avoiding crashes**.  
-The main challenge is balancing **speed vs. safety**.
+Train an agent that drives as fast as possible in **dense traffic** while avoiding crashes.  
+The main challenge is balancing speed vs. safety.
 
 ---
 
@@ -32,7 +32,7 @@ The main challenge is balancing **speed vs. safety**.
 
 - Environment: `highway-fast-v0`
 - Lanes: 4
-- Traffic density: high (~30 vehicles)
+- Traffic density: high (approximately 30 vehicles)
 - Episode duration: 40 steps
 - CPU-friendly configuration
 
@@ -42,7 +42,7 @@ The main challenge is balancing **speed vs. safety**.
 
 ### Observations (State)
 
-I use **Kinematics** observations.  
+I use Kinematics observations.  
 The agent sees a fixed size list of nearby vehicles with:
 
 - presence
@@ -62,7 +62,7 @@ This is an abstraction of a simple throttle/ steering and simplifies learning.
 
 ### Algorithm
 
-I use **DQN (Stable-Baselines3)** because:
+I use DQN (Stable-Baselines3) because:
 - the action space is discrete
 - it runs efficiently on CPU
 - it’s a common baseline for highway-env
@@ -74,7 +74,7 @@ I use **DQN (Stable-Baselines3)** because:
 
 ## Reward Function (Custom Shaping)
 
-The default rewards were effective, but the initial training was too "irresponsible: the agent educated to run after speed and to crash very often.
+The default rewards were effective, but the initial training was too irresponsible: the agent educated to run after speed and to crash very often.
 In response to this a single-syllable shaping word was fitted that compromises speed, safety and easy driving.
 
 <img width="639" height="44" alt="Screenshot 2026-01-12 at 00 56 48" src="https://github.com/user-attachments/assets/f565650f-aef2-4989-b552-20d65452bfbf" />
@@ -111,9 +111,9 @@ Why these values?
 ![Reward Curve](assets/reward_curve.png)
 
 **What the curve shows (brief):**
-- Early phase: low reward because the policy is basically random 
-- Middle phase: reward rises as the agent learns “don’t crash immediately”
-- Late phase: curve stabilizes; improvements become smaller (policy converges under current setup)
+- Early phase: Low reward because the policy is basically random 
+- Middle phase: Reward rises as the agent learns “don’t crash immediately”
+- Late phase: Curve stabilizes; improvements become smaller (policy converges under current setup)
 
 ---
 
@@ -123,17 +123,17 @@ Why these values?
 At first, the agent often spammed `FASTER` and changed lanes aggressively, which caused lots of collisions. I fixed this by:
 - increasing collision penalty
 - adding an unsafe following penalty
-- adding a small lane change penalty
+- adding a lane change penalty
 
 This not only enabled the behavior to become significantly smoother but also did not slow down the agent.
 
 ---
 
-## How to Run (Quickstart)
+## How to Run 
 
 ### 1) Install
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+source .venv/bin/activate | Windows: .venv\\Scripts\\activate
 
 pip install -r requirements.txt
 
@@ -144,7 +144,7 @@ This will train for 300k timesteps and save checkpoints under models/:
 
 python -m src.train
 
-### 3) Evaluate (optional)
+### 3) Evaluate 
 python -m src.evaluate --model models/dqn_full.zip
 
 ### 4) Plot reward curve
@@ -153,9 +153,7 @@ python -m src.plot_rewards
 ---
 
 ### Generate evolution video
-
 GIF evolution is made through a recording of three agents in the same environment.
-random seed and configuration, and concatenation of the videos.
 
 #### Untrained (random policy)
 python -m src.play --seed 0 --record
