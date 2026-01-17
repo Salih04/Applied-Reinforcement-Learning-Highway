@@ -43,12 +43,11 @@ The main challenge is balancing speed vs. safety.
 ### Observations (State)
 
 I use Kinematics observations.  
-The agent sees a fixed size list of nearby vehicles with:
+The agent observes a fixed-size list of nearby vehicles (kinematics features):
 
 - presence
-- relative position `(x, y)`
-- relative velocity `(vx, vy)`
-- heading `(cos(h), sin(h))`
+- relative position (x, y)
+- relative velocity (vx, vy)
 
 This is lightweight and trains fast on CPU.
 
@@ -78,15 +77,24 @@ The default rewards were effective, but the initial training was too irresponsib
 To address this, a custom reward shaping function was designed to explicitly balance speed, safety, and driving smoothness.
 The shaping does not introduce new information, but reweights existing signals to stabilize learning and reduce unsafe behaviors.
 
-Rt​=Rtenv​+αrspeed​+βrright​−γ1[collision]−δ1[dmin​<dunsafe​]−λ1[lane change]
+### Reward Function (Custom Shaping)
 
-**Reward components:**
+\[
+R_t
+= R^{env}_t
++ \alpha \, r_{\text{speed}}(t)
++ \beta \, r_{\text{right}}(t)
+- \gamma \, \mathbb{1}[\text{collision}]
+- \delta \, \mathbb{1}[d_{\min}(t) < d_{\text{unsafe}}]
+- \lambda \, \mathbb{1}[\text{lane change}]
+\]
 
-- $r_{\mathrm{speed}}$: normalized speed reward (mapped from the speed range)
-- $r_{\mathrm{right}}$: right-lane preference reward
-- $\mathbf{1}[\mathrm{collision}]$: collision penalty (discourages crashing behavior)
-- $\mathbf{1}[d_{\min} < d_{\mathrm{unsafe}}]$: unsafe-distance penalty (discourages tailgating)
-- $\mathbf{1}[\mathrm{lane\_change}]$: lane-change penalty (reduces left–right oscillations)
+Where:
+- \(R^{env}_t\) is the original environment reward,
+- \(r_{\text{speed}}(t)\in[0,1]\) is a normalized speed reward,
+- \(r_{\text{right}}(t)\in[0,1]\) encourages staying in the right lane,
+- \(\mathbb{1}[\cdot]\) are binary penalties (1 when the condition is true, else 0),
+- \(d_{\min}(t)\) is the distance to the closest front vehicle in the same lane.
 
 ---
 
@@ -133,10 +141,11 @@ This not only enabled the behavior to become significantly smoother but also did
 ## How to Run 
 
 ### 1) Install
+```bash
 python -m venv .venv
-source .venv/bin/activate | Windows: .venv\\Scripts\\activate
-
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+
 
 ### 2) Train
 This will train for 300k timesteps and save checkpoints under models/:
