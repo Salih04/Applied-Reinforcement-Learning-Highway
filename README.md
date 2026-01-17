@@ -141,7 +141,7 @@ This not only enabled the behavior to become significantly smoother but also did
 ## How to Run 
 
 ### 1) Install
-```bash
+```python
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -174,4 +174,4 @@ python -m src.play --seed 0 --record --model models/dqn_half.zip
 
 #### Fully trained
 python -m src.play --seed 0 --record --model models/dqn_full.zip
-
+```
