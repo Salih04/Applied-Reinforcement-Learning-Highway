@@ -79,22 +79,22 @@ The shaping does not introduce new information, but reweights existing signals t
 
 ### Reward Function (Custom Shaping)
 
-\[
-R_t
-= R^{env}_t
-+ \alpha \, r_{\text{speed}}(t)
-+ \beta \, r_{\text{right}}(t)
-- \gamma \, \mathbb{1}[\text{collision}]
-- \delta \, \mathbb{1}[d_{\min}(t) < d_{\text{unsafe}}]
-- \lambda \, \mathbb{1}[\text{lane change}]
-\]
+Rt​=Rtenv​+αrspeed​(t)+βrlane​(t)−γ1[collision]−δ1[dmin​(t)<dunsafe​]−λ1[lane change]
+
+Plain Text:
+R_t = R_env_t
+    + alpha * r_speed(t)
+    + beta  * r_lane(t)
+    - gamma * I[collision]
+    - delta * I[d_min(t) < d_unsafe]
+    - lambda* I[lane_change]
 
 Where:
-- \(R^{env}_t\) is the original environment reward,
-- \(r_{\text{speed}}(t)\in[0,1]\) is a normalized speed reward,
-- \(r_{\text{right}}(t)\in[0,1]\) encourages staying in the right lane,
-- \(\mathbb{1}[\cdot]\) are binary penalties (1 when the condition is true, else 0),
-- \(d_{\min}(t)\) is the distance to the closest front vehicle in the same lane.
+
+r_speed(t) ∈ [0, 1] normalized speed reward
+r_lane(t) ∈ [0, 1] lane preference (stability / keep-lane)
+I[·] is an indicator (1 if condition true else 0)
+d_min(t) closest front-vehicle gap in same lane
 
 ---
 
