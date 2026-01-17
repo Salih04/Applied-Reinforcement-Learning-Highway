@@ -78,7 +78,7 @@ The default rewards were effective, but the initial training was too irresponsib
 To address this, a custom reward shaping function was designed to explicitly balance speed, safety, and driving smoothness.
 The shaping does not introduce new information, but reweights existing signals to stabilize learning and reduce unsafe behaviors.
 
-<img width="639" height="44" alt="Screenshot 2026-01-12 at 00 56 48" src="https://github.com/user-attachments/assets/f565650f-aef2-4989-b552-20d65452bfbf" />
+Rt​=Rtenv​+αrspeed​+βrright​−γ1[collision]−δ1[dmin​<dunsafe​]−λ1[lane change]
 
 **Reward components:**
 
