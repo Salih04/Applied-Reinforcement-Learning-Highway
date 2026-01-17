@@ -79,9 +79,9 @@ The shaping does not introduce new information, but reweights existing signals t
 
 ### Reward Function (Custom Shaping)
 
-Rt​=Rtenv​+αrspeed​(t)+βrlane​(t)−γ1[collision]−δ1[dmin​(t)<dunsafe​]−λ1[lane change]
+R_t = R_env_t + α·r_speed(t) + β·r_lane(t) − γ·I[collision] − δ·I[d_min(t) < d_unsafe] − λ·I[lane_change]
 
-Plain Text:
+Plain-text version:
 R_t = R_env_t
     + alpha * r_speed(t)
     + beta  * r_lane(t)
@@ -90,11 +90,11 @@ R_t = R_env_t
     - lambda* I[lane_change]
 
 Where:
+- r_speed(t) ∈ [0, 1]: normalized speed reward
+- r_lane(t) ∈ [0, 1]: lane preference (stability / keep-lane)
+- I[·]: indicator function (1 if condition is true, else 0)
+- d_min(t): closest front-vehicle distance in the same lane
 
-r_speed(t) ∈ [0, 1] normalized speed reward
-r_lane(t) ∈ [0, 1] lane preference (stability / keep-lane)
-I[·] is an indicator (1 if condition true else 0)
-d_min(t) closest front-vehicle gap in same lane
 
 ---
 
