@@ -1,11 +1,8 @@
 from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Tuple, Optional
-
+from typing import Tuple, Optional, Any
 import gymnasium as gym
 import numpy as np
-
 
 @dataclass
 class RewardConfig:
@@ -17,16 +14,13 @@ class RewardConfig:
     unsafe_distance_m: float = 10.0
     reward_speed_range: Tuple[float, float] = (20.0, 30.0)
 
-
 class RewardShapingWrapper(gym.Wrapper):
     """
-    Simple reward shaping wrapper for highway-env.
-
-    Adds:
+    Simple reward shaping wrapper for highway-env. It adds:
     - speed reward (normalized)
     - right lane reward
     - crash penalty
-    - unsafe distance penalty (based on closest front vehicle)
+    - unsafe distance penalty 
     - lane change penalty
     """
 
@@ -35,14 +29,13 @@ class RewardShapingWrapper(gym.Wrapper):
         self.cfg = cfg
         self._last_lane_index: Optional[int] = None
 
-    def reset(self, **kwargs):
+    def reset(self, **kwargs: Any) -> tuple[np.ndarray, dict]:
         obs, info = self.env.reset(**kwargs)
         self._last_lane_index = self._get_lane_index()
         return obs, info
 
-    def step(self, action):
+    def step(self, action: int) -> tuple[np.ndarray, float, bool, bool, dict]:
         obs, reward, terminated, truncated, info = self.env.step(action)
-
         shaped = 0.0
         shaped += self.cfg.alpha_speed * self._speed_reward()
         shaped += self.cfg.beta_right_lane * self._right_lane_reward()
@@ -50,12 +43,12 @@ class RewardShapingWrapper(gym.Wrapper):
         shaped -= self.cfg.delta_unsafe * (1.0 if self._unsafe_gap() else 0.0)
         shaped -= self.cfg.lambda_lane_change * (1.0 if self._lane_changed() else 0.0)
 
-        # keep original reward too (optional, but helps stability)
+        # keep original reward 
         total = float(reward) + float(shaped)
         return obs, total, terminated, truncated, info
 
-    def _vehicle(self):
-        # highway-env exposes `vehicle` on unwrapped envs
+    def _vehicle(self) -> Any:
+        # highway environment exposes to vehicle on unwrapped environments
         return getattr(self.env.unwrapped, "vehicle", None)
 
     def _crashed(self, info: dict) -> bool:
@@ -80,7 +73,6 @@ class RewardShapingWrapper(gym.Wrapper):
         lane_index = getattr(v, "lane_index", None)
         if lane_index is None:
             return None
-        # lane_index can be tuple like (road_id, lane_id, index)
         if isinstance(lane_index, tuple) and len(lane_index) >= 3:
             return int(lane_index[2])
         if isinstance(lane_index, int):
@@ -97,8 +89,7 @@ class RewardShapingWrapper(gym.Wrapper):
 
     def _right_lane_reward(self) -> float:
         """
-        Encourage right-most lane (higher reward when lane index is smaller/rightmost)
-        Note: depending on map, lane indexing direction can differ, but for highway-fast it works reasonably.
+        Encourage right most lane for safety
         """
         lane_idx = self._get_lane_index()
         road = getattr(self.env.unwrapped, "road", None)
@@ -120,14 +111,12 @@ class RewardShapingWrapper(gym.Wrapper):
 
     def _unsafe_gap(self) -> bool:
         """
-        Penalize if nearest front vehicle is closer than unsafe_distance_m.
-        This is a heuristic; highway-env has utilities but we keep it student-simple.
+        Penalize if front vehicle is closer than unsafe_distance_m.
         """
         v = self._vehicle()
         road = getattr(self.env.unwrapped, "road", None)
         if v is None or road is None:
             return False
-
         try:
             # find vehicles ahead in same lane (approx)
             my_x = float(v.position[0])
@@ -152,7 +141,7 @@ class RewardShapingWrapper(gym.Wrapper):
 
 def wrap_with_shaping(env: gym.Env, train_cfg) -> gym.Env:
     """
-    Helper to wrap an environment using parameters from TrainConfig.
+    Parameters from TrainConfig.
     """
     rcfg = RewardConfig(
         alpha_speed=train_cfg.alpha_speed,

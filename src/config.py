@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict
@@ -47,7 +46,7 @@ class TrainConfig:
 
 
 def build_train_config() -> TrainConfig:
-    # default highway-env config (works well for grading + fast CPU)
+    # default highway-env config (fast with CPU)
     env_config = {
         "observation": {
             "type": "Kinematics",

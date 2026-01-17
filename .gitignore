@@ -10,8 +10,5 @@ tmp_videos/
 assets/videos/
 *.mp4
 
-
-
-
 .DS_Store
 __MACOSX/

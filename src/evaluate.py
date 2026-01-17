@@ -1,12 +1,9 @@
 from __future__ import annotations
-
 from pathlib import Path
-
 import gymnasium as gym
 import highway_env  # noqa: F401
 import numpy as np
 from stable_baselines3 import DQN
-
 from src.config import build_train_config
 from src.rewards import RewardConfig, RewardShapingWrapper
 from src.utils import repo_root, seed_env

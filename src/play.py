@@ -1,12 +1,9 @@
 from __future__ import annotations
-
 import argparse
 from pathlib import Path
-
 import gymnasium as gym
 import highway_env  # noqa: F401
 from stable_baselines3 import DQN
-
 from src.config import build_train_config
 from src.rewards import wrap_with_shaping
 from src.utils import seed_env, repo_root
@@ -38,31 +35,25 @@ def make_env(cfg, seed: int, record: bool, model_path: str | None) -> gym.Env:
             episode_trigger=lambda ep: True,
             disable_logger=True,
         )
-
     return env
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", default=None)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--record", action="store_true")
     args = parser.parse_args()
-
     cfg = build_train_config()
-
     env = make_env(
         cfg,
         seed=args.seed,
         record=args.record,
         model_path=args.model,
     )
-
     model = None
     if args.model:
         model = DQN.load(args.model, env=env)
-
     obs, _ = env.reset()
     done = truncated = False
 
@@ -71,10 +62,8 @@ def main() -> None:
             action = env.action_space.sample()
         else:
             action, _ = model.predict(obs, deterministic=True)
-
         obs, _, done, truncated, _ = env.step(action)
 
-        # IMPORTANT for RecordVideo
         env.render()
 
     env.close()
